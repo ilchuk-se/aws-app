@@ -1,0 +1,20 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      java: corretto11
+  build:
+    commands:
+      - echo Build started on `date`
+      - gradle test
+      - gradle build
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - sam package --s3-bucket ailchuck-bucket --template-file samTemplate.yml --output-template-file outputSamTemplate.yml
+      - ls -la build/libs
+artifacts:
+  files:
+    - build/libs/aws-app-0.0.1-SNAPSHOT.jar
+    - outputSamTemplate.yml
